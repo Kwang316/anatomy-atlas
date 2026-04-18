@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AnatomyAtlas</class>
+ <widget class="QWidget" name="AnatomyAtlas">
+  <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,1,0">
+
+   <!-- Header -->
+   <item>
+    <widget class="QLabel" name="titleLabel">
+     <property name="text"><string>🫀 Interactive Anatomy Atlas</string></property>
+     <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #0ea5e9; padding: 8px 0;</string></property>
+    </widget>
+   </item>
+
+   <!-- System filter buttons -->
+   <item>
+    <widget class="ctkCollapsibleButton" name="systemsCollapsible">
+     <property name="text"><string>Organ Systems</string></property>
+     <layout class="QHBoxLayout" name="systemsLayout">
+      <item><widget class="QPushButton" name="btnAll">       <property name="text"><string>All</string></property>      </widget></item>
+      <item><widget class="QPushButton" name="btnDigestive"> <property name="text"><string>🍽 Digestive</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnVascular">  <property name="text"><string>🩸 Vascular</string></property> </widget></item>
+      <item><widget class="QPushButton" name="btnRespiratory"><property name="text"><string>🫁 Respiratory</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnUrinary">   <property name="text"><string>💧 Urinary</string></property>  </widget></item>
+      <item><widget class="QPushButton" name="btnSkeletal">  <property name="text"><string>🦴 Skeletal</string></property> </widget></item>
+      <item><widget class="QPushButton" name="btnLymphatic"> <property name="text"><string>🛡 Lymphatic</string></property></widget></item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- Main area: organ list + info panel -->
+   <item>
+    <widget class="QSplitter" name="mainSplitter">
+     <property name="orientation"><enum>Qt::Horizontal</enum></property>
+
+     <!-- Left: organ list -->
+     <widget class="QWidget" name="leftPanel">
+      <layout class="QVBoxLayout">
+       <item>
+        <widget class="QLabel"><property name="text"><string>Structures</string></property>
+         <property name="styleSheet"><string>font-weight: bold; color: #94a3b8;</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="organList">
+         <property name="styleSheet"><string>
+           QListWidget { background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #cbd5e1; }
+           QListWidget::item:selected { background: #0ea5e9; color: white; }
+           QListWidget::item:hover { background: #334155; }
+         </string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="quizButton">
+         <property name="text"><string>🎯  Start Quiz</string></property>
+         <property name="styleSheet"><string>background: #7c3aed; color: white; border-radius: 6px; padding: 8px; font-weight: bold;</string></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
+     <!-- Right: info panel -->
+     <widget class="QWidget" name="rightPanel">
+      <layout class="QVBoxLayout">
+
+       <!-- Organ name + system badge -->
+       <item>
+        <widget class="QLabel" name="organNameLabel">
+         <property name="text"><string>Click a structure in the 3D view or list to explore</string></property>
+         <property name="styleSheet"><string>font-size: 15px; font-weight: bold; color: white; padding: 4px 0;</string></property>
+         <property name="wordWrap"><bool>true</bool></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="systemBadge">
+         <property name="text"><string></string></property>
+         <property name="styleSheet"><string>font-size: 11px; color: #64748b; padding: 2px 0 8px;</string></property>
+        </widget>
+       </item>
+
+       <!-- Stats row -->
+       <item>
+        <widget class="QWidget" name="statsWidget">
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="QWidget" name="volCard">
+            <layout class="QVBoxLayout">
+             <item><widget class="QLabel" name="volLabel"><property name="text"><string>VOLUME</string></property>
+              <property name="styleSheet"><string>font-size: 9px; color: #64748b; letter-spacing: 2px;</string></property></widget></item>
+             <item><widget class="QLabel" name="volValue"><property name="text"><string>—</string></property>
+              <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #0ea5e9;</string></property></widget></item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="rangeCard">
+            <layout class="QVBoxLayout">
+             <item><widget class="QLabel"><property name="text"><string>NORMAL RANGE</string></property>
+              <property name="styleSheet"><string>font-size: 9px; color: #64748b; letter-spacing: 2px;</string></property></widget></item>
+             <item><widget class="QLabel" name="rangeValue"><property name="text"><string>—</string></property>
+              <property name="styleSheet"><string>font-size: 12px; color: #94a3b8;</string></property></widget></item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <!-- Clinical notes -->
+       <item>
+        <widget class="QLabel" name="clinicalLabel">
+         <property name="text"><string>CLINICAL NOTES</string></property>
+         <property name="styleSheet"><string>font-size: 9px; color: #64748b; letter-spacing: 2px; margin-top: 8px;</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="clinicalNotes">
+         <property name="readOnly"><bool>true</bool></property>
+         <property name="styleSheet"><string>background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #cbd5e1; font-size: 12px; padding: 8px;</string></property>
+        </widget>
+       </item>
+
+       <!-- Fun fact -->
+       <item>
+        <widget class="QLabel" name="funFactLabel">
+         <property name="text"><string></string></property>
+         <property name="styleSheet"><string>background: #1e3a5f; border-left: 3px solid #0ea5e9; padding: 8px; color: #7dd3fc; font-size: 11px; border-radius: 0 6px 6px 0;</string></property>
+         <property name="wordWrap"><bool>true</bool></property>
+        </widget>
+       </item>
+
+       <!-- Quiz answer input (hidden by default) -->
+       <item>
+        <widget class="QWidget" name="quizWidget">
+         <property name="visible"><bool>false</bool></property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="QLineEdit" name="quizAnswer">
+            <property name="placeholderText"><string>Name this structure…</string></property>
+            <property name="styleSheet"><string>background: #1e293b; border: 1px solid #334155; color: white; padding: 6px; border-radius: 6px;</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="quizSubmit">
+            <property name="text"><string>Check</string></property>
+            <property name="styleSheet"><string>background: #0ea5e9; color: white; border-radius: 6px; padding: 6px 14px;</string></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <item>
+        <widget class="QLabel" name="quizResult">
+         <property name="text"><string></string></property>
+         <property name="styleSheet"><string>font-size: 14px; font-weight: bold; padding: 4px 0;</string></property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+
+    </widget>
+   </item>
+
+   <!-- Status bar -->
+   <item>
+    <widget class="QLabel" name="statusLabel">
+     <property name="text"><string>Load a segmentation to begin</string></property>
+     <property name="styleSheet"><string>color: #475569; font-size: 11px; padding: 4px 0;</string></property>
+    </widget>
+   </item>
+
+  </layout>
+ </widget>
+</ui>

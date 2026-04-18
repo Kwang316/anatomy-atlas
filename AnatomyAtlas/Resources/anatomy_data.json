@@ -1,0 +1,143 @@
+{
+  "organs": {
+    "liver": {
+      "label": 1,
+      "display_name": "Liver",
+      "system": "digestive",
+      "color": [0.84, 0.47, 0.28],
+      "volume_range_ml": [1000, 1800],
+      "clinical_notes": "Largest internal organ. Performs >500 functions including detoxification, protein synthesis, and bile production. The right lobe is ~6x larger than the left. Key landmark for portal hypertension and hepatocellular carcinoma.",
+      "fun_fact": "The liver is the only organ that can fully regenerate — up to 75% can be removed and it will regrow."
+    },
+    "spleen": {
+      "label": 2,
+      "display_name": "Spleen",
+      "system": "lymphatic",
+      "color": [0.64, 0.22, 0.35],
+      "volume_range_ml": [80, 300],
+      "clinical_notes": "Filters blood and stores platelets. Splenomegaly (>500ml) is a key finding in portal hypertension, lymphoma, and infectious mononucleosis. Highly vascular — splenic rupture is a surgical emergency.",
+      "fun_fact": "The spleen can store up to 1 cup of blood as an emergency reserve."
+    },
+    "right_kidney": {
+      "label": 3,
+      "display_name": "Right Kidney",
+      "system": "urinary",
+      "color": [0.80, 0.35, 0.22],
+      "volume_range_ml": [100, 200],
+      "clinical_notes": "Slightly lower than the left kidney due to hepatic displacement. Normal length 9–12 cm. Key in renal cell carcinoma staging; the right renal vein drains directly into the IVC.",
+      "fun_fact": "Each kidney contains ~1 million nephrons and filters all your blood ~40 times per day."
+    },
+    "left_kidney": {
+      "label": 4,
+      "display_name": "Left Kidney",
+      "system": "urinary",
+      "color": [0.75, 0.30, 0.18],
+      "volume_range_ml": [100, 200],
+      "clinical_notes": "Slightly higher and more medial than right. The left renal vein crosses the aorta anteriorly — susceptible to nutcracker syndrome compression.",
+      "fun_fact": "You can live normally with just one kidney — the remaining kidney compensates by growing larger."
+    },
+    "aorta": {
+      "label": 5,
+      "display_name": "Aorta",
+      "system": "vascular",
+      "color": [0.95, 0.15, 0.15],
+      "volume_range_ml": [30, 80],
+      "clinical_notes": "Largest artery in the body. Normal diameter <3 cm; ≥3 cm = aneurysm. Abdominal aortic aneurysm (AAA) rupture carries 80% mortality. Key landmark for all abdominal surgery.",
+      "fun_fact": "The aorta is roughly the diameter of a garden hose and pumps ~5 litres of blood per minute."
+    },
+    "inferior_vena_cava": {
+      "label": 6,
+      "display_name": "Inferior Vena Cava",
+      "system": "vascular",
+      "color": [0.20, 0.40, 0.85],
+      "volume_range_ml": [20, 60],
+      "clinical_notes": "Largest vein. Returns blood from lower body to the right atrium. IVC thrombus can cause fatal pulmonary embolism. IVC filters placed for DVT patients who can't be anticoagulated.",
+      "fun_fact": "The IVC can collapse during deep inspiration — a normal finding seen on CT."
+    },
+    "stomach": {
+      "label": 7,
+      "display_name": "Stomach",
+      "system": "digestive",
+      "color": [0.95, 0.78, 0.20],
+      "volume_range_ml": [200, 1500],
+      "clinical_notes": "Highly variable in shape and size. Wall thickness >5mm suggests pathology. Key site for peptic ulcer disease and gastric carcinoma. J-shaped when empty, boot-shaped when full.",
+      "fun_fact": "Stomach acid (pH 1.5–3.5) is strong enough to dissolve razor blades — the mucus lining regenerates every 3 days."
+    },
+    "pancreas": {
+      "label": 8,
+      "display_name": "Pancreas",
+      "system": "digestive",
+      "color": [0.98, 0.62, 0.20],
+      "clinical_notes": "Both exocrine (digestive enzymes) and endocrine (insulin, glucagon). Retroperitoneal position makes it difficult to access surgically. Pancreatic ductal adenocarcinoma has the worst 5-year survival of any major cancer (~11%).",
+      "fun_fact": "The pancreas produces ~1.5 litres of digestive juice per day — enough to fill a large water bottle."
+    },
+    "gallbladder": {
+      "label": 9,
+      "display_name": "Gallbladder",
+      "system": "digestive",
+      "color": [0.55, 0.75, 0.30],
+      "volume_range_ml": [20, 50],
+      "clinical_notes": "Stores and concentrates bile. Gallstones affect 10-15% of adults. Wall thickening >3mm and pericholecystic fluid indicate cholecystitis. Cholecystectomy is one of the most common surgeries.",
+      "fun_fact": "The gallbladder concentrates bile up to 10× — it's essentially a bile storage tank."
+    },
+    "urinary_bladder": {
+      "label": 10,
+      "display_name": "Urinary Bladder",
+      "system": "urinary",
+      "color": [0.55, 0.35, 0.85],
+      "volume_range_ml": [50, 500],
+      "clinical_notes": "Wall thickness varies with filling — >3mm when full, >5mm when empty suggests pathology. Bladder cancer most commonly presents as painless haematuria. The trigone (posterior wall) is the most common cancer site.",
+      "fun_fact": "A full bladder can hold up to 600ml — about the same as a large can of soda."
+    },
+    "right_lung": {
+      "label": 11,
+      "display_name": "Right Lung",
+      "system": "respiratory",
+      "color": [0.65, 0.82, 0.92],
+      "volume_range_ml": [1500, 2500],
+      "clinical_notes": "3 lobes (upper, middle, lower). Slightly larger than left. Right main bronchus is more vertical — inhaled foreign bodies preferentially lodge here. Key in lung cancer staging (TNM).",
+      "fun_fact": "The right lung has 3 lobes while the left has only 2 — to make room for the heart."
+    },
+    "left_lung": {
+      "label": 12,
+      "display_name": "Left Lung",
+      "system": "respiratory",
+      "color": [0.55, 0.75, 0.90],
+      "volume_range_ml": [1200, 2000],
+      "clinical_notes": "2 lobes (upper, lower) with the lingula as an anatomical analogue to the right middle lobe. Cardiac notch accommodates the heart. Left lower lobe most common site for aspiration pneumonia in supine patients.",
+      "fun_fact": "Your lungs have a total surface area of ~70 m² — about the size of a tennis court."
+    },
+    "vertebrae": {
+      "label": 13,
+      "display_name": "Vertebral Column",
+      "system": "skeletal",
+      "color": [0.95, 0.92, 0.82],
+      "clinical_notes": "33 vertebrae: 7 cervical, 12 thoracic, 5 lumbar, 5 sacral (fused), 4 coccygeal (fused). Bone density measured by HU — osteoporosis if L1 <110 HU. Vertebral fractures are the most common osteoporotic fracture.",
+      "fun_fact": "You are ~1 cm taller in the morning — spinal discs decompress overnight while lying down."
+    },
+    "ribs": {
+      "label": 14,
+      "display_name": "Ribs",
+      "system": "skeletal",
+      "color": [0.90, 0.88, 0.78],
+      "clinical_notes": "12 pairs: 7 true (attach directly to sternum), 3 false (attach via costal cartilage), 2 floating. Rib fractures are the most common thoracic injury. Multiple adjacent fractures = flail chest (surgical emergency).",
+      "fun_fact": "Rib 1 is the shortest and most curved — it's rarely fractured except by major trauma."
+    },
+    "portal_vein": {
+      "label": 15,
+      "display_name": "Portal Vein",
+      "system": "vascular",
+      "color": [0.35, 0.55, 0.90],
+      "clinical_notes": "Carries nutrient-rich blood from the gut to the liver. Normal diameter <13mm; >13mm suggests portal hypertension. Forms from the confluence of the superior mesenteric and splenic veins behind the pancreatic neck.",
+      "fun_fact": "The portal vein carries 75% of the liver's blood supply — the hepatic artery supplies only 25%."
+    }
+  },
+  "systems": {
+    "digestive":   { "label": "Digestive",    "color": "#f97316", "icon": "🍽" },
+    "urinary":     { "label": "Urinary",       "color": "#a855f7", "icon": "💧" },
+    "vascular":    { "label": "Vascular",      "color": "#ef4444", "icon": "🩸" },
+    "respiratory": { "label": "Respiratory",   "color": "#38bdf8", "icon": "🫁" },
+    "skeletal":    { "label": "Skeletal",      "color": "#e2e8f0", "icon": "🦴" },
+    "lymphatic":   { "label": "Lymphatic",     "color": "#ec4899", "icon": "🛡" }
+  }
+}
