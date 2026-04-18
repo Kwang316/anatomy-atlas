@@ -16,6 +16,7 @@ import SimpleITK as sitk
 import plotly.graph_objects as go
 from pathlib import Path
 from dash import Dash, dcc, html, Input, Output, State, ctx, ALL
+from dash.exceptions import PreventUpdate
 
 _HERE = Path(__file__).parent
 
@@ -52,11 +53,43 @@ def label_to_rgb_map(organs: dict) -> dict:
     return m
 
 
-def make_slice_image(volume, z, l2rgb, highlight_label=None, visible_labels=None):
-    """Return an RGB array (H, W, 3) for axial slice z."""
-    sl  = volume[z]                                    # (Y, X)
+_MAX_DIM = 400   # downsample display dimension to keep Plotly fast
+
+
+def _extract_slice(volume, idx, plane):
+    """Return a 2D label array for the given plane/index, oriented for display."""
+    if plane == "axial":
+        return volume[idx]                  # (Y, X)  — as-is
+    elif plane == "coronal":
+        return volume[::-1, idx, :]         # (Z, X)  — flip Z so superior is at top
+    else:                                   # sagittal
+        return volume[::-1, :, idx]         # (Z, Y)  — flip Z so superior is at top
+
+
+def _plane_dim(volume, plane):
+    """Return number of slices along the scrolling axis for a given plane."""
+    return {"axial": volume.shape[0],
+            "coronal": volume.shape[1],
+            "sagittal": volume.shape[2]}[plane]
+
+
+def make_slice_image(volume, idx, l2rgb, plane="axial",
+                     highlight_label=None, visible_labels=None):
+    """Return an RGB array (H, W, 3), downsampled if large."""
+    sl = _extract_slice(volume, idx, plane)
+
+    # Downsample large slices (e.g. real 512×512 CTs) for display speed
+    h, w = sl.shape
+    if max(h, w) > _MAX_DIM:
+        factor = max(h, w) / _MAX_DIM
+        new_h  = max(1, int(h / factor))
+        new_w  = max(1, int(w / factor))
+        ys = np.linspace(0, h - 1, new_h, dtype=int)
+        xs = np.linspace(0, w - 1, new_w, dtype=int)
+        sl = sl[np.ix_(ys, xs)]
+
     rgb = np.full((*sl.shape, 3), fill_value=0, dtype=np.uint8)
-    rgb[:, :] = l2rgb[0]                              # background
+    rgb[:, :] = l2rgb[0]
 
     for label_id, color in l2rgb.items():
         if label_id == 0:
@@ -74,13 +107,20 @@ def make_slice_image(volume, z, l2rgb, highlight_label=None, visible_labels=None
     return rgb
 
 
-def make_slice_fig(volume, z, l2rgb, highlight_label=None, visible_labels=None,
-                   title_suffix=""):
-    rgb = make_slice_image(volume, z, l2rgb, highlight_label, visible_labels)
+_PLANE_LABELS = {
+    "axial":    "Axial  (inf → sup)",
+    "coronal":  "Coronal  (ant → post)",
+    "sagittal": "Sagittal  (right → left)",
+}
+
+
+def make_slice_fig(volume, idx, l2rgb, plane="axial",
+                   highlight_label=None, visible_labels=None, title_suffix=""):
+    rgb = make_slice_image(volume, idx, l2rgb, plane, highlight_label, visible_labels)
     fig = go.Figure(go.Image(z=rgb))
     fig.update_layout(
         title=dict(
-            text=f"Axial slice {z}{title_suffix}",
+            text=f"{_PLANE_LABELS[plane]}  —  slice {idx}{title_suffix}",
             font=dict(color="#94a3b8", size=11),
             x=0.01, xanchor="left",
         ),
@@ -174,6 +214,7 @@ def build_app(volume, organs, systems, organ_volumes):
             # Hidden stores for app state
             dcc.Store(id="selected-organ", data=None),
             dcc.Store(id="active-system",  data="all"),
+            dcc.Store(id="active-plane",   data="axial"),
             dcc.Store(id="quiz-state",     data={
                 "active": False, "organ": None,
                 "correct": 0, "total": 0,
@@ -287,6 +328,28 @@ def build_app(volume, organs, systems, organ_volumes):
 
                 # ── Centre: slice viewer ────────────────────────────────
                 html.Div([
+                    # Plane toggle buttons
+                    html.Div(style={
+                        "display": "flex", "gap": "8px",
+                        "marginBottom": "10px",
+                    }, children=[
+                        html.Button(
+                            label,
+                            id={"type": "plane-btn", "plane": plane},
+                            n_clicks=0,
+                            style={
+                                "background": f"{BLUE}20" if plane == "axial" else "transparent",
+                                "border": f"1px solid {BLUE}",
+                                "borderRadius": "6px", "color": BLUE,
+                                "padding": "5px 16px", "fontSize": "12px",
+                                "cursor": "pointer", "fontFamily": "inherit",
+                                "fontWeight": "600" if plane == "axial" else "400",
+                            },
+                        )
+                        for plane, label in [("axial", "Axial"),
+                                              ("coronal", "Coronal"),
+                                              ("sagittal", "Sagittal")]
+                    ]),
                     html.Div(style=_card(padding="8px"), children=[
                         dcc.Graph(
                             id="slice-graph",
@@ -296,24 +359,24 @@ def build_app(volume, organs, systems, organ_volumes):
                         ),
                     ]),
                     html.Div(style={"padding": "10px 4px 0"}, children=[
-                        _label("Axial slice — superior ↑  inferior ↓"),
+                        html.P(id="slice-plane-label",
+                               style={"color": MUTED, "fontSize": "9px",
+                                      "letterSpacing": "2px", "margin": "0 0 4px",
+                                      "textTransform": "uppercase"},
+                               children=_PLANE_LABELS["axial"]),
                         dcc.Slider(
                             id="slice-slider",
                             min=0, max=n_slices - 1,
                             value=mid_z, step=1,
                             marks={
-                                0:           {"label": "0 (inf)",
-                                              "style": {"color": MUTED,
-                                                        "fontSize": "10px"}},
+                                0:           {"label": "0",
+                                              "style": {"color": MUTED, "fontSize": "10px"}},
                                 mid_z:       {"label": str(mid_z),
-                                              "style": {"color": MUTED,
-                                                        "fontSize": "10px"}},
-                                n_slices-1:  {"label": f"{n_slices-1} (sup)",
-                                              "style": {"color": MUTED,
-                                                        "fontSize": "10px"}},
+                                              "style": {"color": MUTED, "fontSize": "10px"}},
+                                n_slices-1:  {"label": str(n_slices - 1),
+                                              "style": {"color": MUTED, "fontSize": "10px"}},
                             },
-                            tooltip={"placement": "bottom",
-                                     "always_visible": False},
+                            tooltip={"placement": "bottom", "always_visible": False},
                         ),
                     ]),
                 ]),
@@ -393,6 +456,30 @@ def build_app(volume, organs, systems, organ_volumes):
         return triggered["system"]
 
     @app.callback(
+        Output("active-plane",      "data"),
+        Output("slice-slider",      "max"),
+        Output("slice-slider",      "value"),
+        Output("slice-slider",      "marks"),
+        Output("slice-plane-label", "children"),
+        Input({"type": "plane-btn", "plane": ALL}, "n_clicks"),
+        State({"type": "plane-btn", "plane": ALL}, "id"),
+        prevent_initial_call=True,
+    )
+    def update_plane(n_clicks_list, ids):
+        triggered = ctx.triggered_id
+        if triggered is None:
+            raise PreventUpdate
+        plane = triggered["plane"]
+        n     = _plane_dim(volume, plane)
+        mid   = n // 2
+        marks = {
+            0:   {"label": "0",     "style": {"color": MUTED, "fontSize": "10px"}},
+            mid: {"label": str(mid),"style": {"color": MUTED, "fontSize": "10px"}},
+            n-1: {"label": str(n-1),"style": {"color": MUTED, "fontSize": "10px"}},
+        }
+        return plane, n - 1, mid, marks, _PLANE_LABELS[plane]
+
+    @app.callback(
         Output("selected-organ", "data"),
         Input({"type": "organ-row", "key": ALL}, "n_clicks"),
         State({"type": "organ-row", "key": ALL}, "id"),
@@ -417,12 +504,16 @@ def build_app(volume, organs, systems, organ_volumes):
 
     @app.callback(
         Output("slice-graph", "figure"),
-        Input("slice-slider", "value"),
-        Input("selected-organ", "data"),
+        Input("slice-slider",  "value"),
+        Input("selected-organ","data"),
         Input("active-system", "data"),
-        Input("quiz-state", "data"),
+        Input("active-plane",  "data"),
+        Input("quiz-state",    "data"),
     )
-    def update_slice(z, selected, system, quiz):
+    def update_slice(idx, selected, system, plane, quiz):
+        plane = plane or "axial"
+        idx   = idx or 0
+
         if quiz.get("active") and quiz.get("organ"):
             hl = key_to_label.get(quiz["organ"])
         elif selected:
@@ -430,21 +521,19 @@ def build_app(volume, organs, systems, organ_volumes):
         else:
             hl = None
 
+        vis = None
         if system != "all":
             vis = {organs[k]["label"]
                    for k, v in organs.items()
                    if v.get("system") == system}
-        else:
-            vis = None
 
         suffix = ""
         if hl:
-            name = organs.get(
-                quiz.get("organ") if quiz.get("active") else selected,
-                {}
-            ).get("display_name", "")
+            key  = quiz.get("organ") if quiz.get("active") else selected
+            name = organs.get(key, {}).get("display_name", "")
             suffix = f" — {name}"
-        return make_slice_fig(volume, z, l2rgb, hl, vis, suffix)
+
+        return make_slice_fig(volume, idx, l2rgb, plane, hl, vis, suffix)
 
     @app.callback(
         Output("info-name",   "children"),
