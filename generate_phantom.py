@@ -28,6 +28,9 @@ PHANTOMS = [
     ("urinary_bladder",    10,  (128, 128,  20), (22, 22, 18)),
     ("right_lung",         11,  (168, 100, 130), (32, 40, 55)),
     ("left_lung",          12,  ( 88, 100, 130), (32, 40, 55)),
+    ("vertebrae",          13,  (128, 128,  90), ( 8, 12, 90)),   # central column
+    ("ribs",               14,  (128, 128, 130), (70, 80, 50)),   # wide ellipsoid shell
+    ("portal_vein",        15,  (140, 128,  95), ( 5,  5, 25)),   # short tube near liver
 ]
 
 SPACING = (1.5, 1.5, 1.5)

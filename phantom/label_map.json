@@ -1,0 +1,17 @@
+{
+  "liver": 1,
+  "spleen": 2,
+  "right_kidney": 3,
+  "left_kidney": 4,
+  "aorta": 5,
+  "inferior_vena_cava": 6,
+  "stomach": 7,
+  "pancreas": 8,
+  "gallbladder": 9,
+  "urinary_bladder": 10,
+  "right_lung": 11,
+  "left_lung": 12,
+  "vertebrae": 13,
+  "ribs": 14,
+  "portal_vein": 15
+}
