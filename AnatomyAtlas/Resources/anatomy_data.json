@@ -68,6 +68,7 @@
       "display_name": "Pancreas",
       "system": "digestive",
       "color": [0.98, 0.62, 0.20],
+      "volume_range_ml": [50, 100],
       "clinical_notes": "Both exocrine (digestive enzymes) and endocrine (insulin, glucagon). Retroperitoneal position makes it difficult to access surgically. Pancreatic ductal adenocarcinoma has the worst 5-year survival of any major cancer (~11%).",
       "fun_fact": "The pancreas produces ~1.5 litres of digestive juice per day — enough to fill a large water bottle."
     },

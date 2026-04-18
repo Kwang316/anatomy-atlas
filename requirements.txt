@@ -1,4 +1,6 @@
 SimpleITK>=2.3.0
 numpy>=1.26.0
-TotalSegmentator>=2.0.0   # for real CT segmentation
+dash>=2.17.0
+plotly>=5.20.0
+TotalSegmentator>=2.0.0   # for real CT segmentation (optional)
 # vtk and slicer are bundled with 3D Slicer — do not pip install
